@@ -6,13 +6,13 @@ const maxPostPage = 10;
 
 async function fetchPosts(pageNum) {
   const response = await fetch(
-    `https://jsonplaceholder.typicode.com/posts?_limit=1&_page=0xx`
+    `https://jsonplaceholder.typicode.com/posts?_limit=10&_page=${pageNum}`
   );
   return response.json();
 }
 
 export function Posts() {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [selectedPost, setSelectedPost] = useState(null);
 
   // replace with useQuery
@@ -45,13 +45,13 @@ export function Posts() {
       <div className="pages">
         <button
           disabled={currentPage <= 1}
-          onClick={setCurrentPage((previousState) => previousState - 1)}>
+          onClick={() => {setCurrentPage((previousState) => previousState - 1)}}>
           Previous page
         </button>
-        <span>Page {currentPage + 1}</span>
+        <span>Page {currentPage}</span>
         <button
           disabled={currentPage >= 10}
-          onClick={setCurrentPage((previousState) => previousState + 1)}>
+          onClick={() => {setCurrentPage((previousState) => previousState + 1)}}>
           Next page
         </button>
       </div>
