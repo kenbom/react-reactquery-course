@@ -2,13 +2,15 @@ import InfiniteScroll from "react-infinite-scroller";
 import { useInfiniteQuery } from "react-query";
 import { Person } from "./Person";
 
-const initialUrl = "https://swapi.dev/api/people/";
+const initialUrl =
+  "https://api.unsplash.com/photos/random/?client_id=jFgS8tteGD425f4oZfygQVaVnD6gt6GucN2yyz3xFek&count=6";
+
 const fetchUrl = async (url) => {
   const response = await fetch(url);
   return response.json();
 };
 
-export function InfinitePeople() {
+export function InfinitePeopleCopy() {
   const { data, fetchNextPage, hasNextPage, isLoading, isError, error } = useInfiniteQuery(
     "sw-people",
     ({ pageParam = initialUrl }) => fetchUrl(pageParam),
@@ -16,6 +18,8 @@ export function InfinitePeople() {
       getNextPageParam: (lastPage) => lastPage.next || undefined,
     }
   );
+
+  const hasNextPageFn= ()=>true
 
   if(isLoading) return <div className="loading">Now loading...</div>
   if (isError)
@@ -26,20 +30,11 @@ export function InfinitePeople() {
       </>
     );
   // TODO: get data for InfiniteScroll via React Query
- return(
-    <InfiniteScroll loadMore={fetchNextPage} hasMore={hasNextPage}>
-      {data.pages.map((pageData) => {
-        return pageData.results.map((person) => {
-          return (
-            <Person
-              key={person.name}
-              name={person.name}
-              hairColor={person.hair_color}
-              eyeColor={person.eye_color}
-            />
-          );
-        });
-      })}
-    </InfiniteScroll>
+ return (
+   <InfiniteScroll next={fetchNextPage} hasMore={hasNextPage} >
+     {data.pages.map((page) => {
+       return page.map((item) => {return <img key={item.id} src={item.urls.regular} width="100%"/>})
+      // return <img key={page.id} src={page.urls.regular} width="100%"/>
+     }
  )
-}
+}</InfiniteScroll>)}
